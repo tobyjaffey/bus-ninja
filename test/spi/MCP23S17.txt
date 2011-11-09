@@ -1,0 +1,20 @@
+# MCP23S17, SPI 16 pin expander
+spi
+
+# Initialise
+[0x40 0x0A 0x28]    # WR_REG(0) IOCONA      SEQ_OFF|HAEN
+
+# Turn on GPIOA-0
+[0x40 0x00 0x00]    # WR_REG(0) GPIOADIR    ALL_OUTPUT
+[0x40 0x12 0x01]    # WR_REG(0) GPIOA       GPIOA-0
+
+# Turn off GPIOA-0
+[0x40 0x00 0x00]    # WR_REG(0) GPIOADIR    ALL_OUTPUT
+[0x40 0x12 0x00]    # WR_REG(0) GPIOA       GPIOA-0
+
+
+# Read GPIOA
+[0x40 0x00 0xFF]    # WR_REG(0) GPIOADIR    ALL_INPUT
+[0x41 0x12 r]       # RD_REG(0) GPIOA       read
+
+

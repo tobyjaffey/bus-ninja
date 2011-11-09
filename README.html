@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<style type="text/css"><!--
+body,td,a,p{font-family:Optima,Verdana,arial,sans-serif;text-align:justify}
+/*body,td,a,p{text-align:justify}*/
+body{line-height:1.5;margin-left:3.5em;margin-right:2em; max-width:50em;
+  background-color: #ffffff; color: #000000}
+h1,h2,h3,h4{font-family:helvetica,sans-serif;text-align:left}
+#box{float:right;border:thin solid #000000;
+          margin:1em;padding:1em;width:20em}
+#box li{display:block}
+#box p{text-align:center}
+.littler{ font-size: smaller; }
+.little{ font-size: small; }
+
+table { border-collapse:collapse; margin:1em}
+td { border:thin solid #000000; padding:4px; font-family:monospace}
+th { background-color:#BBBBBB; color:white; border:thin solid #000000; padding:4px; }
+//-->
+</style>
+<title>Bus Ninja</title>
+</head>
+
+<body>
+
+<div id="box">
+<p>
+<b><a href="../busninja-1.0.tar.gz">Download bus-ninja-1.0.tar.gz</a><br></b>
+<b><a href="precompiled/ninja-arduino-diecemilia-atmega168.hex">Download .HEX file for Arduino Diecemilia</a><br></b>
+<a href="src">Browse source</a><br>
+<a href="hardware">Example AT90USB162 Schematic + PCB</a><br>
+</p>
+</div>
+
+<h1>Bus Ninja</h1>
+<p>
+A <a href="http://code.google.com/p/the-bus-pirate/">Bus Pirate</a> clone for Atmel AVR microcontrollers, including the <a href="http://www.arduino.cc/">Arduino</a> and <a href="http://www.pjrc.com/teensy/">Teensy</a>. Featuring a serial console, I2C, SPI and more. On the USB enabled AVRs (AT90USBxxxx and ATMEGAxxUx) USB over serial is used, allowing for single chip Bus Ninja hardware.
+</p>
+<p>
+Bus Ninja lets you quickly protoype with I2C and SPI devices without writing any code. Just wire up a device to your board and start talking to it directly from the Bus Ninja console.
+</p>
+
+<h3>Features</h3>
+
+<ul>
+<li>Interactive shell with Bus Pirate like syntax
+<li>I2C (soft i2c driver from userial)
+<ul>
+<li>I2C address scanner ('s' command from i2c mode)
+</ul>
+<li>SPI
+<li>Flow controlled USB CDC (serial) (AT90USBxxxx/ATMEGAxxUx only)
+<li>Modular software making it straightforward to add
+<ul>
+ <li>New commands
+ <li>New buses
+ <li>New USB gadgets - mass storage EEPROM interface, HID devices, etc. (AT90USBxxxx/ATMEGAxxUx only)
+</ul>
+</ul>
+
+<h3>Core commands</h3>
+<p>
+<pre>&gt; help</pre>
+Print list of available commands
+</p>
+
+<p>
+<pre>&gt; version</pre>
+Print build string
+</p>
+
+<p>
+<pre>&gt; reset</pre>
+Reset board
+</p>
+
+<p>
+<pre>&gt; spi</pre>
+Enter SPI bus mode
+</p>
+
+<p>
+<pre>&gt; i2c</pre>
+Enter i2c bus mode
+</p>
+
+<p>
+<pre>&gt; led &lt;0-6&gt;</pre>
+Set LED pattern
+</p>
+
+
+<h3>Wiring</h3>
+<p>
+When connecting up I2C and SPI devices, signals should be connected the pins below. For Teensy, use the AT90USBxxxx variants.
+</p>
+
+<p>
+<table>
+<tr><th>Function</th><th>Arduino pin</th><th>AT90USBxxxx/ATMEGAxxUx pin</th</tr>
+<tr><td>I2C SDA</td><td>Analog 4 (PORTC4)</td><td>PORTB2</td></tr>
+<tr><td>I2C SCL</td><td>Analog 5 (PORTC5)</td><td>PORTB1</td></tr>
+<tr><td>SPI CLK</td><td>Digital 13 (PORTB5)</td><td>PORTB1</td></tr>
+<tr><td>SPI MISO</td><td>Digital 12 (PORTB4)</td><td>PORTB3</td></tr>
+<tr><td>SPI MOSI</td><td>Digital 11 (PORTB3)</td><td>PORTB2</td></tr>
+<tr><td>SPI CS</td><td>Digital 9 (PORTB1)</td><td>PORTB4</td></tr>
+<tr><td>LED</td><td>Digital 2 (PORTD2)</td><td>PORTD4</td></tr>
+</table>
+</p>
+
+
+<h3>Bus commands</h3>
+Once a bus mode is selected (i2c/spi), bus commands can be sent. See the <a href="http://dangerousprototypes.com/bus-pirate-manual/#syntax">Bus Pirate manuals</a> for more details:
+
+Eg.
+
+<pre>
+&gt; spi
+&gt; [0x40 0x0A 0x28]
+CS ENABLED
+WRITE: 0x40
+WRITE: 0x0A
+WRITE: 0x28
+CS DISABLED
+</pre>
+
+(see also the command examples in the <a href="test">test/</a> directory)
+
+
+<h3>Arduino Examples</h3>
+
+<h4>Controlling an LED</h4>
+To prove that the Bus Ninja software is working on your Arduino, start by controlling an LED. Connect the anode of your LED to digital pin 2 and the cathode to ground (it would be wise to also add a current limiting resistor in series, say 220R).
+
+Connect to the Arduino's serial port with your favourite terminal emulator at 8-N-1 9600bps.
+
+<pre>
+screen /dev/ttyUSB0 9600
+</pre>
+
+Type <cite>led</cite> followed by an integer from 0-6 to set the LED fade pattern.
+
+<h4>Controlling a Microchip MCP23S17 SPI 16-bit I/O expander</h4>
+<p>
+<img src="test/spi/MCP23S17-breadboard.jpg">
+&nbsp;
+<img src="test/spi/MCP23S17-pinout.png">
+</p>
+<p>
+Wire the chip to the Arduino like this:
+
+<table>
+<tr><th>MCP23S17</th><th>Arduino</th></tr>
+<tr><td>VDD</td><td>5V</td></tr>
+<tr><td>VSS</td><td>GND</td></tr>
+<tr><td>SO</td><td>SPI MISO (Digital 12)</td></tr>
+<tr><td>SI</td><td>SPI MOSI (Digital 11)</td></tr>
+<tr><td>CS</td><td>SPI CS (Digital 9)</td></tr>
+<tr><td>SCK</td><td>SPI CLK (Digital 13)</td></tr>
+<tr><td>Reset</td><td>5V</td></tr>
+</table>
+
+<p>
+Connect an LED, voltmeter or oscilloscope to GPA0. Then, open the Bus Ninja serial console and enter commands.
+</p>
+
+Enter SPI mode<br>
+<pre>
+spi
+</pre>
+
+Initialise the chip for non-sequential access<br>
+<pre>
+[0x40 0x0A 0x28]    # WR_REG(0) IOCONA      SEQ_OFF|HAEN
+</pre>
+
+Set all of PORTA as outputs<br>
+<pre>
+[0x40 0x00 0x00]    # WR_REG(0) GPIOADIR    ALL_OUTPUT
+</pre>
+
+Set GPIOA-0 high<br>
+<pre>
+[0x40 0x12 0x01]    # WR_REG(0) GPIOA       GPIOA-0
+</pre>
+
+Set GPIOA-0 low<br>
+<pre>
+[0x40 0x12 0x00]    # WR_REG(0) GPIOA       GPIOA-0
+</pre>
+</p>
+
+
+<h4>Controlling a Microchip 24LC16B I2C EEPROM</h4>
+<p>
+<img src="test/i2c/24LC16B-breadboard.jpg">
+&nbsp;
+<img src="test/i2c/24LC16B-pinout.png">
+</p>
+<p>
+Wire the chip to the Arduino like this:
+
+<table>
+<tr><th>24LC16B</th><th>Arduino</th></tr>
+<tr><td>VCC</td><td>5V</td></tr>
+<tr><td>VSS</td><td>GND</td></tr>
+<tr><td>SDA</td><td>I2C SDA (Analog 4)</td></tr>
+<tr><td>SI</td><td>I2C SCL (Analog 5)</td></tr>
+<tr><td>Reset</td><td>5V</td></tr>
+</table>
+
+<p>
+<b>For I2C to properly function you must add two pullup resistors. One from SDA to 5V, one from SCL to 5V.</b>
+</p>
+
+Enter I2C mode<br>
+<pre>
+i2c
+</pre>
+
+Write {0x10, 0x20, 0x30, 0x40} at address 0x0000<br>
+<pre>
+[0xA6 0 0 0x10 0x20 0x30 0x40]
+</pre>
+
+Set the read pointer to address 0x0000<br>
+<pre>
+[0xA6 0 0]
+</pre>
+
+Read back your 4 bytes<br>
+<pre>
+[0xA7 r:4]
+</pre>
+
+
+<h3>Building the code</h3>
+Edit config.mk and change PROGRAM_CMD for your system.
+<br>
+To build and flash to Arduino Diecemilia (atmega168):<br>
+<pre>
+ cd src &amp;&amp; make BOARD=ARDUINO clean &amp;&amp; make BOARD=ARDUINO &amp;&amp; make BOARD=ARDUINO program
+</pre>
+<br>
+To build for Teensy 1.0 (at90usb162):<br>
+<pre>
+ cd src &amp;&amp; make BOARD=TEENSY clean &amp;&amp; make BOARD=TEENSY &amp;&amp; make BOARD=TEENSY program
+</pre>
+
+
+<h3>Supported Hardware</h3>
+<b>Known working:</b>
+<p>
+<a href="http://www.arduino.cc/en/Main/ArduinoBoardDiecimila">Arduino Diecemilia</a><br>
+<a href="http://www.pjrc.com/teensy/schematic.html">Teensy 1.0</a><br>
+<a href="http://blog.hodgepig.org/articles/000006-flatworm/index.html">Flatworm</a><br>
+</p>
+
+<b>Very likely to work:</b>
+(even more likely if you donate hardware...)
+<p>
+<a href="http://www.arduino.cc/en/Main/ArduinoBoardDuemilanove">Arduino Duemilanove</a><br>
+Arduino Mega<br>
+<a href="http://www.pjrc.com/store/teensy.html">Teensy 2.0</a><br>
+<a href="http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3879">AT90USBKEY</a><br>
+<a href="http://code.google.com/p/micropendous/">Micropendous</a><br>
+<a href="http://fletchtronics.net/bumble-b">Bumble-b</a><br>
+</p>
+
+
+<h3>FAQ</h3>
+
+<p>
+Q. Why is it called Bus Ninja?
+<br>
+A. Because Ninjas are better than Pirates and Yarrrrrduino sounds silly.
+</p>
+
+<p>
+Q. What hardware does Bus Ninja run on?
+<br>
+A. It was originally developed on Teensy1 (AT90USB162), then later ported to Arduino (ATMega168). Adding support for other AVRs should just be a matter of changing the definitions in config.mk.
+</p>
+
+<p>
+Q. Why do I lose characters when I paste to the Arduino?
+<br>
+A. The Arduino serial port isn't flow controlled, use the USB version of Bus Ninja
+</p>
+
+<p>
+Q. How do I port Bus Ninja to my custom AVR/Arduino board?
+<br>
+A. Edit config*.mk, setup FCPU, MCU, LED PORT/PIN and desired features.
+</p>
+
+<p>
+Q. Why aren't you using LUFA's scheduler/task framework?
+<br>
+A. Bus Ninja needs to remain portable to other stacks and processors, so it doesn't use LUFA's application framework.
+</p>
+
+<p>
+Q. How do I add a new command?
+<br>
+A. Use the macros DECLARE_COMMAND(mycmd), ADD_COMMAND(mycmd) and DEFINE_COMMAND(mycmd) in global_commands.c
+</p>
+
+<p>
+Q. How do I add a new bus?
+<br>
+A. Declare a bus_interface_t, provide handlers for the methods, enable it with bus_init(&my_bus). See bus_spi.[ch]. The buses are enabled by a command in global_commands.c
+</p>
+
+<p>
+Q. How do I disable a feature?
+<br>
+A. Edit config.mk, comment out unused features.
+</p>
+
+<p>
+Q. Why isn't the LED command hooked up to the on-board LED on Arduino?
+<br>
+A. The LED is on the SPI CLK line, so is needed for SPI.
+</p>
+
+<p>
+Q. Why clone the Bus Pirate?
+<br>
+A. To get to a single chip Bus Pirate work-a-like with a free software toolchain.
+</p>
+
+
+<h3>License and acknowledgements</h3>
+<p>
+Unless otherwise stated, everything is licensed under <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC-0</a>.
+</p>
+<p>
+Bus Ninja also contains code from:<br>
+LUFA (Dean Camera)<br>
+userial (Thomas Pircher)<br>
+estick-jtag/opendous-jtag (Cahya Wirawan, Vladimir Fonov, Dean Camera, Denver Gingerich)
+</p>
+
+<p>
+Although Bus Ninja shares no code with the Bus Pirate project, it wouldn't exist without it. Thanks.
+</p>
+
+<hr>
+For suggestions, hardware donations and patches, contact:<br>
+Joby Taffey &lt;jrt@hodgepig.org&gt;
+
+</body>
+
+
+</html>
