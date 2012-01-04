@@ -4,8 +4,12 @@ else
 ifeq ($(BOARD),TEENSY)
 include config-teensy.mk
 else
+ifeq ($(BOARD),LEONARDPIRATE)
+include config-leonard_pirate.mk
+else
 # Default to arduino
 include config-arduino.mk
+endif
 endif
 endif
 
