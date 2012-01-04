@@ -67,6 +67,15 @@
 #define SCL_OUT         PORTB
 #define SDA_IN          PINB
 #define SCL_IN          PINB
+#elif __AVR_ATmega32U4__
+#define SDA             PD1        // SDA pin
+#define SCL             PD0        // SCL pin
+#define SDA_DDR         DDRD
+#define SCL_DDR         DDRD
+#define SDA_OUT         PORTD
+#define SCL_OUT         PORTD
+#define SDA_IN          PIND
+#define SCL_IN          PIND
 #else
 #error Unsupported processor
 #endif
