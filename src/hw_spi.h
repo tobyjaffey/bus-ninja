@@ -19,6 +19,14 @@
 #define SPI_MOSI    PB2
 #define SPI_MISO    PB3
 #define SPI_CS      PB4
+#elif __AVR_ATmega32U4__
+#define SPI_PORT    PORTB
+#define SPI_DDR     DDRB
+#define SPI_SS      PB0
+#define SPI_SCLK    PB1
+#define SPI_MOSI    PB2
+#define SPI_MISO    PB3
+#define SPI_CS      PB4
 #else
 #error Unsupported processor
 #endif
