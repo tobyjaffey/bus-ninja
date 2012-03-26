@@ -5,11 +5,9 @@ void hw_spi_init(void)
 {
     uint8_t tmp;
 
-    SPI_DDR |= _BV(SPI_CS); // CS as output
-    hw_spi_cs_deassert();
-
     // SCK and MOSI as output, SS as output - we're master
     SPI_DDR |= _BV(SPI_SCLK) | _BV(SPI_MOSI) | _BV(SPI_SS);
+    hw_spi_cs_deassert();
 
     // Enable MISO pull-up
     SPI_PORT |= _BV(SPI_MISO);
