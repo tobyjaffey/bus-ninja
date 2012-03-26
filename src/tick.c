@@ -7,7 +7,9 @@ ISR(TIMER0_OVF_vect)
 {
     ticks++;
 
+#ifdef CONFIG_HW_LED_ALIVE_CHECK
     hw_led_tick(ticks);
+#endif
 }
 
 void tick_init(void)

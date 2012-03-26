@@ -1,5 +1,6 @@
 #
 # CONFIG FOR ARDUINO DIECEMILIA
+# Compatible with Duemilanove
 # 
 MCU=atmega168
 F_CPU = 16000000UL
@@ -14,6 +15,7 @@ CONFIG_BUS_SPI=y
 CONFIG_HW_UART=y
 # Console on hw_uart
 CONFIG_HW_UART_CONSOLE=y
-PROGRAM_CMD=/Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin/avrdude -C /Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr/etc/avrdude.conf -pm168 -cstk500v1 -P/dev/tty.usbserial-A1001MTD -b19200 -D -Uflash:w:$(TARGET).hex
+# Note: MCU type and speed for Duemilanove
+PROGRAM_CMD=avrdude -p m328p -c arduino -P/dev/ttyUSB0 -b57600 -D -Uflash:w:$(TARGET).hex
 
 
