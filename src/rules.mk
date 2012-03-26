@@ -5,6 +5,13 @@ ifeq ($(CONFIG_WATCHDOG),y)
 CFLAGS += -DCONFIG_WATCHDOG
 endif
 
+# CONFIG_HW_LED_ALIVE_CHECK
+# Fade in/out hw led by default to show we're alive and not locked up
+# on CPU level (fading happens by interrupt).
+ifeq ($(CONFIG_HW_LED_ALIVE_CHECK),y)
+CFLAGS += -DCONFIG_HW_LED_ALIVE_CHECK
+endif
+
 # CONFIG_USBDEV_CDC_CONSOLE
 ifeq ($(CONFIG_USBDEV_CDC_CONSOLE),y)
 CONFIG_USBDEV_CDC=y

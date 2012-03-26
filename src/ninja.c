@@ -34,8 +34,10 @@ int main(void)
 	cpu_init();
     watchdog_init();
 
+#ifdef CONFIG_HW_LED_ALIVE_CHECK
     /* Bring up low level LED */
     hw_led_init();
+#endif
 #ifdef CONFIG_HW_UART
     /* Bring up low level hardware UART */
     hw_uart_init();
