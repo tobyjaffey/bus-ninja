@@ -14,6 +14,8 @@ enum
     STATE_IN_TOKEN,
 };
 
+static BOOL duplex;
+
 /*****************************************************************************/
 
 // "mycommand ... .... ..."
@@ -71,11 +73,20 @@ static BOOL handle_command(const uint8_t *start, const uint8_t *end, BOOL firstT
     // handle write command (a number)
     if (parse_number(start, end-start, &num))
     {
-        if (NULL != current_bus && NULL != current_bus->write)
+        if (NULL != current_bus)
         {
-            while(repeat--)
-                current_bus->write((uint8_t)num);
-            return FALSE;
+            if (duplex && NULL != current_bus->xact)
+            {
+                while(repeat--)
+                    current_bus->xact((uint8_t)num);
+                return FALSE;
+            }
+            if (!duplex && NULL != current_bus->write)
+            {
+                while(repeat--)
+                    current_bus->write((uint8_t)num);
+                return FALSE;
+            }
         }
     }
     else
@@ -136,8 +147,9 @@ void execute_command_line(const uint8_t *str, size_t len)
                     case ',':
                         break;
 
-                    case '[':
                     case '{':
+                        duplex = TRUE;
+                    case '[':
                         firstToken = FALSE;
                         if (NULL != current_bus && NULL != current_bus->start)
                             current_bus->start();
@@ -146,6 +158,7 @@ void execute_command_line(const uint8_t *str, size_t len)
                     case ']':
                     case '}':
                         firstToken = FALSE;
+                        duplex = FALSE;
                         if (NULL != current_bus && NULL != current_bus->stop)
                             current_bus->stop();
                         break;

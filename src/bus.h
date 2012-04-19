@@ -11,6 +11,7 @@ typedef struct
     void (*stop)(void);
     void (*write)(uint8_t c);
     void (*read)(void);
+    void (*xact)(uint8_t c); // perform duplex transaction (e.g. SPI transfer)
     BOOL (*command)(const uint8_t *start, size_t len, uint32_t repeat);
 } bus_interface_t;
 
