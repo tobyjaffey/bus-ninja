@@ -34,7 +34,7 @@ static void bus_spi_stop(void)
 static void bus_spi_write(uint8_t c)
 {
     hw_spi_write8(c);
-    bus_log_puts_P(PSTR("WRITE: 0x"));
+    bus_log_puts_P(PSTR("WRITE: "));
     bus_log_puthex8(c);
     bus_log_newline();
 }
@@ -43,7 +43,7 @@ static void bus_spi_read(void)
 {
     uint8_t c;
     c = hw_spi_write8(0xFF);
-    bus_log_puts_P(PSTR("READ: 0x"));
+    bus_log_puts_P(PSTR("READ: "));
     bus_out(c);
     bus_log_newline();
 }
@@ -52,11 +52,11 @@ static void bus_spi_xact(uint8_t c)
 {
     uint8_t r;
     r = hw_spi_write8(c);
-    bus_log_puts_P(PSTR("WRITE: 0x"));
+    bus_log_puts_P(PSTR("WRITE: "));
     bus_out(c);
     bus_log_newline();
     // TODO: refactor with *_read()
-    bus_log_puts_P(PSTR("READ: 0x"));
+    bus_log_puts_P(PSTR("READ: "));
     bus_out(r);
     bus_log_newline();
 }
