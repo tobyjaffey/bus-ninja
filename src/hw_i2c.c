@@ -58,6 +58,15 @@
 #define SCL_OUT         PORTC
 #define SDA_IN          PINC
 #define SCL_IN          PINC
+#elif __AVR_ATmega328P__
+#define SDA             PC4        // SDA pin
+#define SCL             PC5        // SCL pin
+#define SDA_DDR         DDRC
+#define SCL_DDR         DDRC
+#define SDA_OUT         PORTC
+#define SCL_OUT         PORTC
+#define SDA_IN          PINC
+#define SCL_IN          PINC
 #elif __AVR_AT90USB162__
 #define SDA             PB2        // SDA pin
 #define SCL             PB1        // SCL pin
