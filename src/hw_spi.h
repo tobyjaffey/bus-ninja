@@ -10,6 +10,13 @@
 #define SPI_MOSI    PB3
 #define SPI_MISO    PB4
 #define SPI_SCLK    PB5
+#elif __AVR_ATmega328P__
+#define SPI_PORT    PORTB
+#define SPI_DDR     DDRB
+#define SPI_SS      PB2
+#define SPI_MOSI    PB3
+#define SPI_MISO    PB4
+#define SPI_SCLK    PB5
 #elif __AVR_AT90USB162__
 #define SPI_PORT    PORTB
 #define SPI_DDR     DDRB
