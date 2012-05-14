@@ -49,7 +49,7 @@ CFLAGS += -ffunction-sections
 CFLAGS += -fdata-sections
 CFLAGS += -fpack-struct
 CFLAGS += -fshort-enums
-CFLAGS += --param inline-call-cost=2  
+#CFLAGS += --param inline-call-cost=2  
 CFLAGS += -finline-limit=3 
 CFLAGS += -fno-inline-small-functions 
 CFLAGS += -Wall -Werror
