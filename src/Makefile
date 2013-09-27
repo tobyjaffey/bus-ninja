@@ -1,3 +1,6 @@
+ifeq ($(BOARD),PRO-MINI)
+include config-pro_mini.mk
+else
 ifeq ($(BOARD),ARDUINO)
 include config-arduino.mk
 else
@@ -9,6 +12,7 @@ include config-leonard_pirate.mk
 else
 # Default to arduino
 include config-arduino.mk
+endif
 endif
 endif
 endif
