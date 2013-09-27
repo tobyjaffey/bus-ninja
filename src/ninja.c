@@ -31,7 +31,7 @@ void driver_tick(void)
 int main(void)
 {
     /* Bring up processor */
-	cpu_init();
+    cpu_init();
     watchdog_init();
 
 #ifdef CONFIG_HW_LED_ALIVE_CHECK
@@ -51,12 +51,25 @@ int main(void)
     /* Bring up console */
     console_init();
 
+    console_newline();
+    console_newline();
+    console_newline();
+    console_puts_P(PSTR("*"));
+    console_newline();
+    console_puts_P(PSTR("* Bus ninja ver. " VERSION_STR));
+    console_newline();
+    console_puts_P(PSTR("*"));
+    console_newline();
+    console_newline();
+
 #ifdef CONFIG_DEBUG_RESET_REASON
     /* Report reason for last reset */
     console_puts_P(PSTR("Reset cause:"));
     console_puthex8(MCUSR);
     console_newline();
 #endif
+
+    console_puts_P(PSTR("> "));
 
     /* Set default LED pattern */
     led_set_seq(LED_SEQ_SINE);
@@ -76,5 +89,4 @@ int main(void)
         driver_tick();
 	}
 }
-
 
