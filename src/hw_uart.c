@@ -25,6 +25,12 @@ void hw_uart_init(void)
 #elif __AVR_ATmega328P__
     UBRR0 = (F_CPU / (16UL * BAUD)) - 1;
     UCSR0B = _BV(TXEN0) | _BV(RXEN0);
+#elif __AVR_ATmega8__
+    uint16_t b
+      = (F_CPU / (16UL * BAUD)) - 1;
+    UBRRH = (uint8_t)(b >> 8);
+    UBRRL = (uint8_t)b;
+    UCSRB = _BV(TXEN) | _BV(RXEN);
 #elif __AVR_AT90USB162__
     UBRR1 = UBRR_VAL;
     UCSR1B = _BV(TXEN1) | _BV(RXEN1);
@@ -40,6 +46,11 @@ void hw_uart_tick(void)
     if ((UCSR0A&(1<<RXC0)) != 0)
     {
         uint8_t c = UDR0;
+        console_rx_callback(c);
+    }
+#elif __AVR_ATmega8__
+    if ((UCSRA&(1<<RXC)) != 0) {
+        uint8_t c = UDR;
         console_rx_callback(c);
     }
 #elif __AVR_AT90USB162__
@@ -60,6 +71,10 @@ void hw_uart_putc(char c)
     while (bit_is_clear(UCSR0A, UDRE0))
         watchdog_reset();
     UDR0 = c;
+#elif __AVR_ATmega8__
+    while (bit_is_clear(UCSRA, UDRE))
+        watchdog_reset();
+    UDR = c;
 #elif __AVR_AT90USB162__
     while (bit_is_clear(UCSR1A, UDRE1))
         watchdog_reset();

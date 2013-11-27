@@ -6,8 +6,11 @@
 
 void cpu_init(void)
 {
+	/* XXX an associated macro is checked, not the function */
+#ifdef clock_prescale_get
 	/* Disable clock division */
 	clock_prescale_set(clock_div_1);
+#endif
 }
 
 void cpu_reset(void)

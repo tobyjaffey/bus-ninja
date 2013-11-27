@@ -49,7 +49,7 @@
 
 #else
 
-#if __AVR_ATmega168__ || __AVR_ATmega328P__
+#if __AVR_ATmega8__ || __AVR_ATmega168__ || __AVR_ATmega328P__
 #define SDA             PC4        // SDA pin
 #define SCL             PC5        // SCL pin
 #define SDA_DDR         DDRC
