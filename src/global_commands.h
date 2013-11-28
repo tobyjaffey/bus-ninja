@@ -8,7 +8,7 @@ typedef BOOL (*global_command_func_t)(const uint8_t *tok_start, const uint8_t *l
 
 typedef struct
 {
-    const prog_char *name;
+    const char *name;
     global_command_func_t handler;
 } global_command_t;
 
