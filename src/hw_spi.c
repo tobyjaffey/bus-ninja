@@ -3,7 +3,7 @@
 
 void hw_spi_init(void)
 {
-    uint8_t tmp;
+    uint8_t tmp __attribute__ ((unused)); /* used to discard status */
 
     // SCK and MOSI as output, SS as output - we're master
     SPI_DDR |= _BV(SPI_SCLK) | _BV(SPI_MOSI) | _BV(SPI_SS);
