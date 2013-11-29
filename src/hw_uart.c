@@ -13,7 +13,7 @@
 
 void hw_uart_init(void)
 {
-#if __AVR_ATmega168__
+#if __AVR_ATmega168__ || __AVR_ATmega328P__
 #if BAUD > 57600
     // Setup lower divider to get higher precision for high baud rate.
     UCSR0A |= _BV(U2X0);
@@ -21,9 +21,6 @@ void hw_uart_init(void)
 #else
     UBRR0 = UBRR_VAL;
 #endif
-    UCSR0B = _BV(TXEN0) | _BV(RXEN0);
-#elif __AVR_ATmega328P__
-    UBRR0 = (F_CPU / (16UL * BAUD)) - 1;
     UCSR0B = _BV(TXEN0) | _BV(RXEN0);
 #elif __AVR_AT90USB162__
     UBRR1 = UBRR_VAL;
