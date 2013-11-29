@@ -3,7 +3,7 @@
 
 #include <avr/io.h>
 
-#if __AVR_ATmega168__ || __AVR_ATmega328P__
+#if __AVR_ATmega8__ || __AVR_ATmega168__ || __AVR_ATmega328P__
 #define SPI_PORT    PORTB
 #define SPI_DDR     DDRB
 #define SPI_SS      PB2
