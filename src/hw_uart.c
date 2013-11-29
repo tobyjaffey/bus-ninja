@@ -6,29 +6,32 @@
 #include "console.h"
 #include "watchdog.h"
 
-// When doing calculations per page 174 od atmega168 datasheet,
-// make sure we use real numbers and round, not truncate
-#define UBRR_VAL ((1.0 * F_CPU / (16.0 * BAUD)) + 0.5 - 1)
-#define UBRR_DOUBLESPEED_VAL ((1.0 * F_CPU / (8.0 * BAUD)) + 0.5 - 1)
+#include <util/setbaud.h>       /* BAUD may be defined in hw_uart.h */
 
 void hw_uart_init(void)
 {
 #if __AVR_ATmega168__ || __AVR_ATmega328P__
-#if BAUD > 57600
-    // Setup lower divider to get higher precision for high baud rate.
+#if USE_2X
     UCSR0A |= _BV(U2X0);
-    UBRR0 = UBRR_DOUBLESPEED_VAL;
 #else
-    UBRR0 = UBRR_VAL;
+    UCSR0A &= ~_BV(U2X0);
 #endif
+    UBRR0 = UBRR_VALUE;
     UCSR0B = _BV(TXEN0) | _BV(RXEN0);
 #elif __AVR_ATmega8__
-    /* XXX use UBRR_DOUBLESPEED_VAL if appropriate */
-    UBRRH = (uint8_t)((int)UBRR_VAL >> 8);
-    UBRRL = (uint8_t)UBRR_VAL;
+#if USE_2X
+    UCSRA |=  _BV(U2X);
+#else
+    UCSRA &= ~_BV(U2X);
+#endif
+    UBRRH = UBRRH_VALUE;
+    UBRRL = UBRRL_VALUE;
     UCSRB = _BV(TXEN) | _BV(RXEN);
 #elif __AVR_AT90USB162__
-    UBRR1 = UBRR_VAL;
+#if USE_2X
+#error U2X not supported on AT90USB162
+#endif
+    UBRR1 = UBRR_VALUE;
     UCSR1B = _BV(TXEN1) | _BV(RXEN1);
 #else
 #error Unsupported device, FIXME
