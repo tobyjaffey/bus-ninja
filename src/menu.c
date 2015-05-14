@@ -21,7 +21,7 @@ MENU
 enum { MENU };
 #undef X
 #define X(sym,str) sym##_str,
-const uint8_t *my_menu[] PROGMEM = { MENU NULL };
+const uint8_t *const my_menu[] PROGMEM = { MENU NULL };
 #endif
 /*****************************************************************/
 #if 1
@@ -42,7 +42,7 @@ MY_MENU2
 enum { MY_MENU2 };
 #undef X
 #define X(sym,str) sym##_str,
-const uint8_t *my_menu2[] PROGMEM = { MY_MENU2 NULL };
+const uint8_t *const my_menu2[] PROGMEM = { MY_MENU2 NULL };
 
 /*****************************************************************/
 #endif
@@ -56,7 +56,7 @@ static void menu_print_item(uint8_t index, const uint8_t *str_P)
     console_newline();
 }
 
-uint8_t menu_show(const uint8_t **menu_P)
+uint8_t menu_show(const uint8_t *const *menu_P)
 {
     const uint8_t *str_P;
     uint8_t index = 0;
