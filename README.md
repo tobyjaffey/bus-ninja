@@ -1,11 +1,11 @@
-#Bus Ninja
+# Bus Ninja
 
-##Bus Ninja
+## Bus Ninja
 A Bus Pirate clone for Atmel AVR microcontrollers, including the Arduino and Teensy. Featuring a serial console, I2C, SPI and more. On the USB enabled AVRs (AT90USBxxxx and ATMEGAxxUx) USB over serial is used, allowing for single chip Bus Ninja hardware.
 
 Bus Ninja lets you quickly protoype with I2C and SPI devices without writing any code. Just wire up a device to your board and start talking to it directly from the Bus Ninja console.
 
-###Features
+### Features
 
 - Interactive shell with Bus Pirate like syntax
 - I2C (soft i2c driver from userial)
@@ -17,26 +17,26 @@ Bus Ninja lets you quickly protoype with I2C and SPI devices without writing any
  - New buses
  - New USB gadgets - mass storage EEPROM interface, HID devices, etc. (AT90USBxxxx/ATMEGAxxUx only)
 
-###Commands
-####help
+### Commands
+#### help
 Print list of available commands
 
-####version
+#### version
 Print build string
 
-####reset
+#### reset
 Reset board
 
-####spi
+#### spi
 Enter SPI bus mode
 
-####i2c
+#### i2c
 Enter i2c bus mode
 
-####led <0-6>
+#### led <0-6>
 Set LED pattern
 
-###Wiring
+### Wiring
 When connecting up I2C and SPI devices, signals should be connected the pins below. For Teensy, use the AT90USBxxxx variants.
 
 <table>
@@ -51,11 +51,11 @@ When connecting up I2C and SPI devices, signals should be connected the pins bel
 </table>
 
 
-###Bus commands
+### Bus commands
 Once a bus mode is selected (`i2c`/`spi`), bus commands can be sent. See the Bus Pirate manuals</a> for more details
 
 Eg.
-
+```c
     > spi
     > [0x40 0x0A 0x28]
     CS ENABLED
@@ -63,22 +63,22 @@ Eg.
     WRITE: 0x0A
     WRITE: 0x28
     CS DISABLED
-
+```
 (see also the command examples in the <a href="test">test/</a> directory)
 
 
-###Arduino Examples
+### Arduino Examples
 
-####Controlling an LED
+#### Controlling an LED
 To prove that the Bus Ninja software is working on your Arduino, start by controlling an LED. Connect the anode of your LED to digital pin 2 and the cathode to ground (it would be wise to also add a current limiting resistor in series, say 220R).
 
 Connect to the Arduino's serial port with your favourite terminal emulator at 8-N-1 9600bps.
-
+```c
     screen /dev/ttyUSB0 9600
-
+```
 Type `led` followed by an integer from 0-6 to set the LED fade pattern.
 
-####Controlling a Microchip MCP23S17 SPI 16-bit I/O expander
+#### Controlling a Microchip MCP23S17 SPI 16-bit I/O expander
 Wire the chip to the Arduino like this:
 
 <table>
@@ -95,6 +95,7 @@ Wire the chip to the Arduino like this:
 Connect an LED, voltmeter or oscilloscope to GPA0. Then, open the Bus Ninja serial console and enter commands.
 
 Enter SPI mode
+```    
     spi
 
 Initialise the chip for non-sequential access
@@ -108,9 +109,9 @@ Set GPIOA-0 high
 
 Set GPIOA-0 low
     [0x40 0x12 0x00]    # WR_REG(0) GPIOA       GPIOA-0
+```
 
-
-####Controlling a Microchip 24LC16B I2C EEPROM
+#### Controlling a Microchip 24LC16B I2C EEPROM
 Wire the chip to the Arduino like this:
 
 <table>
@@ -137,7 +138,7 @@ Read back your 4 bytes
     [0xA7 r:4]
 
 
-###Building the code
+### Building the code
 Edit `config.mk` and change `PROGRAM_CMD` for your system.
 
 To build and flash to Arduino Diecemilia (atmega168):
@@ -147,7 +148,7 @@ To build for Teensy 1.0 (at90usb162):
     cd src && make BOARD=TEENSY clean && make BOARD=TEENSY && make BOARD=TEENSY program
 
 
-###FAQ
+### FAQ
 
 Q. Why is it called Bus Ninja?
 A. Because Ninjas are better than Pirates and Yarrrrrduino sounds silly.
@@ -180,7 +181,7 @@ Q. Why clone the Bus Pirate?
 A. To get to a single chip Bus Pirate work-a-like with a free software toolchain.
 
 
-###License and acknowledgements
+### License and acknowledgements
 Unless otherwise stated, everything is licensed under CC-0.
 
 Bus Ninja also contains code from:
